@@ -13,21 +13,11 @@ func TestHello(t *testing.T) {
 
 	Hello(response, request)
 
-	t.Run("response body", func(t *testing.T) {
-		got := response.Body.String()
-		want := "Hello, World!\n"
+	if response.Body.String() != "Hello, World!\n" {
+		t.Errorf("Invalid response body from server; got %v, want %v", got, want)
+	}
 
-		if got != want {
-			t.Errorf("Invalid response body from server; got %v, want %v", got, want)
-		}
-	})
-
-	t.Run("response status code", func(t *testing.T) {
-		got := response.Code
-		want := 200
-
-		if got != want {
-			t.Errorf("Invalid response status code from server; got %v, want %v", got, want)
-		}
-	})
+	if response.Code != 200 {
+		t.Errorf("Invalid response status code from server; got %v, want %v", got, want)
+	}
 }
