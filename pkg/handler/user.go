@@ -4,6 +4,8 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"strconv"
+	"strings"
 
 	"chitchat/pkg/model"
 )
@@ -31,5 +33,28 @@ func GetAllUsers(w http.ResponseWriter, r *http.Request) {
 	err := json.NewEncoder(w).Encode(users)
 	if err != nil {
 		fmt.Fprintf(w, "Unable to parse defined data to User structure...")
+	}
+}
+
+func GetUserById(w http.ResponseWriter, r *http.Request) {
+
+	user := model.User{
+		Id:       567,
+		Uuid:     "long-string-3",
+		Name:     "Bob",
+		Email:    "bob@gmail.com",
+		Password: "decentP@ssw0rd",
+	}
+
+	id := strings.TrimPrefix(r.URL.Path, "/api/v1/users/")
+
+	if id != strconv.Itoa(user.Id) {
+		//fmt.Fprintf(w, "User does not exist...")
+		w.WriteHeader(http.StatusNotFound)
+	} else {
+		err := json.NewEncoder(w).Encode(user)
+		if err != nil {
+			fmt.Fprintf(w, "Unable to parse defined structure to user structure ...")
+		}
 	}
 }
